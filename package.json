@@ -1,6 +1,6 @@
 {
   "name": "@alex-programmer/cron",
-  "version": "0.0.3",
+  "version": "0.0.3-alpha",
   "description": "A universal cron task management platform CLI tool",
   "main": "dist/index.js",
   "packageManager": "pnpm@9.14.1",
