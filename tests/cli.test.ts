@@ -209,7 +209,6 @@ describe('Cron CLI', () => {
         'tailwind.config.ts',
         'components.json',
         '.gitignore',
-        '.eslintrc.json',
         'vitest.config.ts',
         'LICENSE',
         'README.md'

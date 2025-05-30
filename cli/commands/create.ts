@@ -92,7 +92,6 @@ export async function createProject(projectName?: string, options: CreateOptions
       'tailwind.config.ts',
       'components.json',
       '.gitignore',
-      '.eslintrc.json',
       'vitest.config.ts',
       'LICENSE',
       'README.md'

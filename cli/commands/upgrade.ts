@@ -107,7 +107,6 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
       'tailwind.config.ts',
       'components.json',
       '.gitignore',
-      '.eslintrc.json',
       'vitest.config.ts'
     ];
     
