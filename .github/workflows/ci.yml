@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20.19.2'
+  PNPM_VERSION: '9.14.1'
+
+jobs:
+  ci:
+    name: CI Pipeline
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: ${{ env.PNPM_VERSION }}
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'pnpm'
+        
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      
+    - name: Check TypeScript types
+      run: pnpm tsc --noEmit
+      
+    - name: Build CLI
+      run: pnpm build-cli
+      
+    - name: Build Next.js app
+      run: pnpm build
+      
+    - name: Run all tests
+      run: pnpm test
+      
+    - name: Update template (dry run)
+      run: pnpm update-template
