@@ -2,7 +2,6 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import inquirer from 'inquirer';
 import ora from 'ora';
-import { execSync } from 'child_process';
 
 interface CreateOptions {
   template?: string;
@@ -84,6 +83,7 @@ export async function createProject(projectName?: string, options: CreateOptions
       'public',
       'config',
       'scripts',
+      '.storybook',
       'next.config.ts',
       'tsconfig.json',
       'postcss.config.mjs',
@@ -92,6 +92,8 @@ export async function createProject(projectName?: string, options: CreateOptions
       'tailwind.config.ts',
       'components.json',
       '.gitignore',
+      '.eslintrc.json',
+      'vitest.config.ts',
       'LICENSE',
       'README.md'
     ];
@@ -129,7 +131,22 @@ export async function createProject(projectName?: string, options: CreateOptions
       packageJson.scripts.dev = packageJson.scripts.dev || 'next dev --turbopack';
       packageJson.scripts.build = packageJson.scripts.build || 'next build';
       packageJson.scripts.start = packageJson.scripts.start || 'next start';
+      packageJson.scripts.lint = packageJson.scripts.lint || 'next lint';
       packageJson.scripts.upgrade = 'node scripts/upgrade.js';
+      
+      // Remove CLI-specific scripts
+      delete packageJson.scripts['test:cli'];
+      delete packageJson.scripts['build-cli'];
+      delete packageJson.scripts['prepublishOnly'];
+      delete packageJson.scripts.test;
+      
+      // Keep useful development scripts
+      if (packageJson.scripts.storybook) {
+        // Keep storybook scripts
+      }
+      if (packageJson.scripts['test:watch']) {
+        // Keep testing scripts
+      }
       
       await fs.writeJson(targetPackageJsonPath, packageJson, { spaces: 2 });
     }
@@ -149,9 +166,10 @@ const { execSync } = require('child_process');
 
 console.log('🔄 Upgrading Cron Task Platform...');
 console.log('This will update your project to the latest version while preserving your data and configurations.');
+console.log('⚠️  Using alpha version - features may change.');
 
 try {
-  execSync('npx @alex-programmer/cron upgrade', { 
+  execSync('npx @alex-programmer/cron@alpha upgrade', { 
     stdio: 'inherit',
     cwd: process.cwd()
   });

@@ -131,8 +131,9 @@ describe('Cron CLI', () => {
       const scriptContent = fs.readFileSync(upgradeScriptPath, 'utf-8');
       expect(scriptContent).toContain('#!/usr/bin/env node');
       expect(scriptContent).toContain('execSync');
-      expect(scriptContent).toContain('npx @alex-programmer/cron upgrade');
+      expect(scriptContent).toContain('npx @alex-programmer/cron@alpha upgrade');
       expect(scriptContent).toContain('Upgrading Cron Task Platform');
+      expect(scriptContent).toContain('Using alpha version - features may change');
 
       // Check if script is executable
       const stats = fs.statSync(upgradeScriptPath);
@@ -208,6 +209,8 @@ describe('Cron CLI', () => {
         'tailwind.config.ts',
         'components.json',
         '.gitignore',
+        '.eslintrc.json',
+        'vitest.config.ts',
         'LICENSE',
         'README.md'
       ];
@@ -216,6 +219,9 @@ describe('Cron CLI', () => {
       const hasPostcssConfig = fs.existsSync(path.join(projectPath, 'postcss.config.mjs')) ||
                               fs.existsSync(path.join(projectPath, 'postcss.config.js'));
       expect(hasPostcssConfig).toBe(true);
+
+      // Check if .storybook directory exists
+      expect(fs.existsSync(path.join(projectPath, '.storybook'))).toBe(true);
 
       expectedFiles.forEach(file => {
         expect(fs.existsSync(path.join(projectPath, file))).toBe(true);

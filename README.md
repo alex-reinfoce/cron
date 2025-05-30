@@ -1,13 +1,16 @@
-# Cron CLI
+# Cron CLI (Alpha)
 
 A universal CLI tool for creating and managing cron task management platforms.
+
+⚠️ **Alpha Version Notice**: This is an alpha release. Features may change and stability is not guaranteed for production use.
 
 ## Quick Start
 
 ### Create a new project
 
 ```bash
-npx @alex-programmer/cron create my-cron-project
+# Using the alpha version
+npx @alex-programmer/cron@alpha create my-cron-project
 cd my-cron-project
 npm install
 npm run dev
@@ -17,7 +20,19 @@ npm run dev
 
 ```bash
 cd your-cron-project
-npx @alex-programmer/cron upgrade
+npx @alex-programmer/cron@alpha upgrade
+```
+
+## Installation Options
+
+### Use specific alpha version
+```bash
+npx @alex-programmer/cron@0.0.4-alpha create my-project
+```
+
+### Use latest alpha
+```bash
+npx @alex-programmer/cron@alpha create my-project
 ```
 
 ## Features
@@ -45,8 +60,8 @@ Creates a new cron task management project.
 
 **Example:**
 ```bash
-npx @alex-programmer/cron create my-scheduler
-npx @alex-programmer/cron create my-scheduler --template default
+npx @alex-programmer/cron@alpha create my-scheduler
+npx @alex-programmer/cron@alpha create my-scheduler --template default
 ```
 
 ### `cron upgrade`
@@ -58,8 +73,8 @@ Upgrades an existing project to the latest version while preserving your data an
 
 **Example:**
 ```bash
-npx @alex-programmer/cron upgrade
-npx @alex-programmer/cron upgrade --force
+npx @alex-programmer/cron@alpha upgrade
+npx @alex-programmer/cron@alpha upgrade --force
 ```
 
 ## What gets preserved during upgrades?

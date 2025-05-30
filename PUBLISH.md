@@ -4,10 +4,14 @@ This document explains how to publish the `cron` CLI tool to npm.
 
 ## Overview
 
-The `@alex-programmer/cron` CLI tool helps users create and manage cron task management platforms. When published, users can run:
+The `@alex-programmer/cron` CLI tool helps users create and manage cron task management platforms. 
+
+⚠️ **Current Status**: Alpha version - not ready for stable release.
+
+When published as alpha, users can run:
 
 ```bash
-npx @alex-programmer/cron create my-project
+npx @alex-programmer/cron@alpha create my-project
 ```
 
 ## Prerequisites
@@ -23,12 +27,20 @@ npx @alex-programmer/cron create my-project
 
 ### 1. Update Version
 
-Update the version in `package.json`:
+Update the version in `package.json` for alpha releases:
 
 ```json
 {
   "name": "@alex-programmer/cron",
-  "version": "1.0.1"
+  "version": "0.0.4-alpha"
+}
+```
+
+For stable releases:
+```json
+{
+  "name": "@alex-programmer/cron", 
+  "version": "1.0.0"
 }
 ```
 
@@ -68,16 +80,30 @@ npm run build-cli
 
 ### 3. Publish
 
+For alpha releases:
+```bash
+npm publish --tag alpha
+```
+
+For stable releases:
 ```bash
 npm publish
 ```
 
 ## Testing Published Package
 
-After publishing, test the published package:
+After publishing alpha, test the published package:
 
 ```bash
-npx cron@latest create test-published-project
+npx @alex-programmer/cron@alpha create test-published-project
+cd test-published-project
+npm install
+npm run dev
+```
+
+After publishing stable version:
+```bash
+npx @alex-programmer/cron@latest create test-published-project
 cd test-published-project
 npm install
 npm run dev

@@ -98,6 +98,7 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
       'lib',
       'types',
       'public',
+      '.storybook',
       'next.config.ts',
       'tsconfig.json',
       'postcss.config.mjs',
@@ -105,7 +106,9 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
       'next-env.d.ts',
       'tailwind.config.ts',
       'components.json',
-      '.gitignore'
+      '.gitignore',
+      '.eslintrc.json',
+      'vitest.config.ts'
     ];
     
     // Update files and directories
