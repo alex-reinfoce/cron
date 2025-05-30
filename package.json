@@ -9,7 +9,6 @@
   },
   "files": [
     "dist/**/*",
-    "templates/**/*",
     "README.md",
     "LICENSE"
   ],
@@ -24,8 +23,7 @@
     "test:cli": "npm run build-cli && vitest --run tests/cli.test.ts",
     "test": "npm run test:cli",
     "build-cli": "tsc --project tsconfig.cli.json",
-    "update-template": "node scripts/update-template.js",
-    "prepublishOnly": "npm run update-template && npm run build-cli"
+    "prepublishOnly": "npm run build-cli"
   },
   "keywords": [
     "cron",

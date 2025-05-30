@@ -17,7 +17,7 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
     
     // Check if this is a cron project
     if (!await fs.pathExists(versionFile)) {
-      console.error('Error: This is not a cron project. Run "npx cron create" to create a new project.');
+      console.error('Error: This is not a cron project. Run "npx @alex-programmer/cron create" to create a new project.');
       process.exit(1);
     }
     
@@ -26,9 +26,14 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
       process.exit(1);
     }
     
-    // Read current version
+    // Read current version and get latest version
     const currentVersion = await fs.readFile(versionFile, 'utf-8');
-    const latestVersion = '1.0.0'; // This should fetch the latest version from npm registry
+    
+    // Get latest version from CLI package
+    const cliSourceDir = path.join(__dirname, '../..');
+    const cliPackageJsonPath = path.join(cliSourceDir, 'package.json');
+    const cliPackageJson = await fs.readJson(cliPackageJsonPath);
+    const latestVersion = cliPackageJson.version;
     
     if (currentVersion.trim() === latestVersion) {
       console.log('✅ Your project is already up to date!');
@@ -55,22 +60,21 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
     spinner.start('Upgrading project...');
     
     // Backup user data
-    const backupDir = path.join(currentDir, '.crons-backup');
+    const backupDir = path.join(currentDir, '.cron-backup');
     await fs.ensureDir(backupDir);
     
-    // Backup SQLite database
-    const dbFiles = ['cron_tasks.db', 'data/cron_tasks.db'];
+    // Backup SQLite database files
+    const dbFiles = ['tasks.db', 'data/tasks.db', 'cron_tasks.db', 'data/cron_tasks.db'];
     for (const dbFile of dbFiles) {
       const dbPath = path.join(currentDir, dbFile);
       if (await fs.pathExists(dbPath)) {
-        // Use full path to avoid filename conflicts
         const backupName = dbFile.replace(/\//g, '_');
         await fs.copy(dbPath, path.join(backupDir, backupName));
       }
     }
     
-    // Backup user configuration files (including config directory)
-    const configFiles = ['.env', '.env.local', '.env.production'];
+    // Backup user configuration files
+    const configFiles = ['.env', '.env.local', '.env.production', '.env.development'];
     for (const configFile of configFiles) {
       const configPath = path.join(currentDir, configFile);
       if (await fs.pathExists(configPath)) {
@@ -78,31 +82,35 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
       }
     }
     
-    // Backup user's custom config directory (very important!)
+    // Backup user's custom config directory
     const configDirPath = path.join(currentDir, 'config');
     if (await fs.pathExists(configDirPath)) {
       await fs.copy(configDirPath, path.join(backupDir, 'config'));
     }
     
-    // Get template files
-    const templateDir = path.join(__dirname, '../../templates/default');
+    // Get source files from CLI package
+    const sourceDir = cliSourceDir;
     
-    // Files and directories to update (note: config directory is removed)
-    const filesToUpdate = [
+    // Files and directories to update
+    const itemsToUpdate = [
       'app',
       'components', 
       'lib',
       'types',
-      'scripts',
+      'public',
       'next.config.ts',
       'tsconfig.json',
       'postcss.config.mjs',
-      'next-env.d.ts'
+      'postcss.config.js',
+      'next-env.d.ts',
+      'tailwind.config.ts',
+      'components.json',
+      '.gitignore'
     ];
     
-    // Update files
-    for (const item of filesToUpdate) {
-      const sourcePath = path.join(templateDir, item);
+    // Update files and directories
+    for (const item of itemsToUpdate) {
+      const sourcePath = path.join(sourceDir, item);
       const targetPath = path.join(currentDir, item);
       
       if (await fs.pathExists(sourcePath)) {
@@ -113,40 +121,44 @@ export async function upgradeProject(options: UpgradeOptions = {}) {
     
     // Handle config directory: only create default config if config directory doesn't exist
     const userConfigPath = path.join(currentDir, 'config');
-    const templateConfigPath = path.join(templateDir, 'config');
+    const sourceConfigPath = path.join(sourceDir, 'config');
     
-    if (!await fs.pathExists(userConfigPath) && await fs.pathExists(templateConfigPath)) {
+    if (!await fs.pathExists(userConfigPath) && await fs.pathExists(sourceConfigPath)) {
       // If user doesn't have config directory, create default config
-      await fs.copy(templateConfigPath, userConfigPath);
+      await fs.copy(sourceConfigPath, userConfigPath);
       console.log('  ℹ️  Created default config directory (first time setup)');
     } else if (await fs.pathExists(userConfigPath)) {
       console.log('  ✅ Preserved existing config directory (user customizations protected)');
     }
     
     // Update package.json dependencies, but preserve user's project name and other custom configurations
-    const templatePackageJson = await fs.readJson(path.join(templateDir, 'package.json'));
+    const sourcePackageJsonPath = path.join(sourceDir, 'package.json');
+    const sourcePackageJson = await fs.readJson(sourcePackageJsonPath);
     const currentPackageJson = await fs.readJson(packageJsonPath);
     
     // Merge dependencies
     currentPackageJson.dependencies = {
       ...currentPackageJson.dependencies,
-      ...templatePackageJson.dependencies
+      ...sourcePackageJson.dependencies
     };
     currentPackageJson.devDependencies = {
       ...currentPackageJson.devDependencies,
-      ...templatePackageJson.devDependencies
+      ...sourcePackageJson.devDependencies
     };
     
     // Update scripts
     currentPackageJson.scripts = {
       ...currentPackageJson.scripts,
-      ...templatePackageJson.scripts
+      ...sourcePackageJson.scripts
     };
     
     // Ensure project-specific configurations are maintained
     delete currentPackageJson.bin;
     delete currentPackageJson.files;
+    delete currentPackageJson.publishConfig;
+    delete currentPackageJson.packageManager;
     currentPackageJson.private = true;
+    currentPackageJson.scripts.upgrade = 'node scripts/upgrade.js';
     
     await fs.writeJson(packageJsonPath, currentPackageJson, { spaces: 2 });
     
