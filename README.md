@@ -4,6 +4,12 @@ A universal CLI tool for creating and managing cron task management platforms.
 
 ⚠️ **Alpha Version Notice**: This is an alpha release. Features may change and stability is not guaranteed for production use.
 
+## Interface
+
+<img src="./home.pic.png" style="box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.1); border-radius: 10px; margin-bottom: 20px;" alt="home" />
+
+<img src="./log.pic.png" style="box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.1); border-radius: 10px;" alt="log" />
+
 ## Quick Start
 
 ### Create a new project
