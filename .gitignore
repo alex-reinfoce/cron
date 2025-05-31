@@ -52,3 +52,10 @@ cron_tasks.db
 # Temporary test projects
 /test-*
 tasks.db
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
