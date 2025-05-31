@@ -26,11 +26,13 @@ npx @alex-programmer/cron@0.0.5-alpha upgrade
 ## Installation Options
 
 ### Use specific alpha version
+
 ```bash
 npx @alex-programmer/cron@0.0.5-alpha create my-project
 ```
 
 ### Use latest alpha
+
 ```bash
 npx @alex-programmer/cron@0.0.5-alpha create my-project
 ```
@@ -56,9 +58,11 @@ The generated project includes:
 Creates a new cron task management project.
 
 **Options:**
+
 - `-t, --template <template>`: Template to use (default: "default")
 
 **Example:**
+
 ```bash
 npx @alex-programmer/cron@0.0.5-alpha create my-scheduler
 npx @alex-programmer/cron@0.0.5-alpha create my-scheduler --template default
@@ -69,9 +73,11 @@ npx @alex-programmer/cron@0.0.5-alpha create my-scheduler --template default
 Upgrades an existing project to the latest version while preserving your data and configurations.
 
 **Options:**
+
 - `-f, --force`: Force upgrade without confirmation
 
 **Example:**
+
 ```bash
 npx @alex-programmer/cron@0.0.5-alpha upgrade
 npx @alex-programmer/cron@0.0.5-alpha upgrade --force
@@ -90,9 +96,3 @@ npx @alex-programmer/cron@0.0.5-alpha upgrade --force
 - 🔄 Configuration files (`next.config.ts`, `tsconfig.json`, etc.)
 - 🔄 Dependencies in `package.json`
 - 🔄 Build scripts and tooling
-
-## Project Structure
-
-After creating a project, you'll get:
-
-```
