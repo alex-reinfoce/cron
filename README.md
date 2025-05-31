@@ -10,7 +10,7 @@ A universal CLI tool for creating and managing cron task management platforms.
 
 ```bash
 # Using the alpha version
-npx @alex-programmer/cron@alpha create my-cron-project
+npx @alex-programmer/cron@0.0.5-alpha create my-cron-project
 cd my-cron-project
 npm install
 npm run dev
@@ -20,26 +20,26 @@ npm run dev
 
 ```bash
 cd your-cron-project
-npx @alex-programmer/cron@alpha upgrade
+npx @alex-programmer/cron@0.0.5-alpha upgrade
 ```
 
 ## Installation Options
 
 ### Use specific alpha version
 ```bash
-npx @alex-programmer/cron@0.0.4-alpha create my-project
+npx @alex-programmer/cron@0.0.5-alpha create my-project
 ```
 
 ### Use latest alpha
 ```bash
-npx @alex-programmer/cron@alpha create my-project
+npx @alex-programmer/cron@0.0.5-alpha create my-project
 ```
 
 ## Features
 
 The generated project includes:
 
-- ✅ **Modern Web Interface**: Built with Next.js and Ant Design
+- ✅ **Modern Web Interface**: Built with Next.js and Shadcn
 - ⏰ **Flexible Scheduling**: Support for various cron expressions (every second/minute/hour/day/month)
 - 🔄 **Task Management**: Pause, resume, and test tasks with real-time feedback
 - 📊 **Execution Monitoring**: Comprehensive logs and statistics
@@ -60,8 +60,8 @@ Creates a new cron task management project.
 
 **Example:**
 ```bash
-npx @alex-programmer/cron@alpha create my-scheduler
-npx @alex-programmer/cron@alpha create my-scheduler --template default
+npx @alex-programmer/cron@0.0.5-alpha create my-scheduler
+npx @alex-programmer/cron@0.0.5-alpha create my-scheduler --template default
 ```
 
 ### `cron upgrade`
@@ -73,8 +73,8 @@ Upgrades an existing project to the latest version while preserving your data an
 
 **Example:**
 ```bash
-npx @alex-programmer/cron@alpha upgrade
-npx @alex-programmer/cron@alpha upgrade --force
+npx @alex-programmer/cron@0.0.5-alpha upgrade
+npx @alex-programmer/cron@0.0.5-alpha upgrade --force
 ```
 
 ## What gets preserved during upgrades?
@@ -96,41 +96,3 @@ npx @alex-programmer/cron@alpha upgrade --force
 After creating a project, you'll get:
 
 ```
-my-cron-project/
-├── app/                 # Next.js app directory
-│   ├── api/            # API routes for task management
-│   ├── globals.css     # Global styles
-│   ├── layout.tsx      # Root layout
-│   └── page.tsx        # Main dashboard
-├── components/          # React components
-│   ├── TaskForm.tsx    # Task creation/editing form
-│   └── TaskLogs.tsx    # Execution logs display
-├── lib/                # Core libraries
-│   ├── cronManager.ts  # Task scheduling engine
-│   ├── cronUtils.ts    # Cron expression utilities
-│   ├── database.ts     # SQLite database layer
-│   └── startup.ts      # Application initialization
-├── types/              # TypeScript definitions
-├── public/             # Static assets
-├── .cron-version      # Version tracking for upgrades
-└── package.json        # Project configuration
-```
-
-## Database Storage
-
-The platform uses SQLite for data persistence:
-
-- **Development**: `cron_tasks.db` in project root
-- **Production**: `data/cron_tasks.db` (configurable via environment)
-
-## Contributing
-
-This is an open-source project. Contributions are welcome!
-
-## License
-
-MIT
-
----
-
-**Need help?** Open an issue on GitHub or check the documentation in your generated project.
