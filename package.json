@@ -39,6 +39,7 @@
     "test:coverage": "vitest --coverage",
     "test:cli": "npm run build-cli && vitest --run tests/cli.test.ts",
     "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "test": "npm run test:cli && npm run test:e2e",
     "build-cli": "tsc --project tsconfig.cli.json",
     "prepublishOnly": "npm run build-cli"
