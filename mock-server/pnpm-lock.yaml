@@ -11,9 +11,6 @@ importers:
       '@hono/node-server':
         specifier: ^1.14.3
         version: 1.14.3(hono@4.7.11)
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
       hono:
         specifier: ^4.7.11
         version: 4.7.11
@@ -189,9 +186,6 @@ packages:
   '@types/node@20.17.57':
     resolution: {integrity: sha512-f3T4y6VU4fVQDKVqJV4Uppy8c1p/sVvS3peyqxyWnzkqXFJLRU7Y1Bl7rMS1Qe9z0v4M6McY0Fp9yBsgHJUsWQ==}
 
-  dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
-
   esbuild@0.25.5:
     resolution: {integrity: sha512-P8OtKZRv/5J5hhz0cUAdu/cLuPIKXpQl1R9pZtvmHWQvrAUVd0UNIPT4IB4W3rNOqVO0rlqHmCIbSwxh/c9yUQ==}
     engines: {node: '>=18'}
@@ -309,8 +303,6 @@ snapshots:
   '@types/node@20.17.57':
     dependencies:
       undici-types: 6.19.8
-
-  dayjs@1.11.13: {}
 
   esbuild@0.25.5:
     optionalDependencies:

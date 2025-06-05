@@ -1,11 +1,10 @@
-import { serve } from "@hono/node-server";
-import { Hono } from "hono";
-import dayjs from "dayjs";
+import { serve } from '@hono/node-server';
+import { Hono } from 'hono';
 
 const app = new Hono();
 
-app.get("/", (c) => {
-  return c.text(`[${dayjs().format("YYYY-MM-DD HH:mm:ss")}] Hello Hono!`);
+app.get('/', (c) => {
+  return c.text(`Hello Hono!`);
 });
 
 serve(
