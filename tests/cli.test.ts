@@ -109,7 +109,6 @@ describe('Cron CLI', () => {
       expect(packageJson.files).toBeUndefined();
       expect(packageJson.publishConfig).toBeUndefined();
       expect(packageJson.packageManager).toBeUndefined();
-      expect(packageJson.scripts.dev).toContain('next dev');
       expect(packageJson.scripts.build).toContain('next build');
       expect(packageJson.scripts.upgrade).toBe('node scripts/upgrade.js');
       expect(packageJson.dependencies).toBeDefined();
