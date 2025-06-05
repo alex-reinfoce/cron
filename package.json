@@ -31,6 +31,7 @@
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev:web\" \"npm run dev:mock-server\"",
+    "clean:db": "rimraf ./tasks.db",
     "dev:web": "next dev --turbopack",
     "dev:mock-server": "cd mock-server && npm run dev",
     "build": "next build",
