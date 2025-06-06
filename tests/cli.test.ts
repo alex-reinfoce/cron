@@ -59,7 +59,7 @@ describe('Cron CLI', () => {
       expect(output).toContain('npm run upgrade');
     });
 
-    it('should create correct project structure from root directory and run successfully', () => {
+    it('should create correct project structure from root directory and build successfully', () => {
       const projectName = 'test-structure';
       execSync(`node ${CLI_PATH} create ${projectName}`, {
         cwd: testDir,
