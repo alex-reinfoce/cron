@@ -86,15 +86,19 @@ describe('Cron CLI', () => {
       expect(fs.existsSync(path.join(projectPath, 'tailwind.config.ts'))).toBe(true);
       expect(fs.existsSync(path.join(projectPath, 'components.json'))).toBe(true);
 
-      // Run the project
-      // execSync(`pnpm install`, {
-      //   cwd: projectPath,
-      // });
-      // const output = execSync(`pnpm run dev`, {
-      //   cwd: projectPath,
-      // });
-      // console.log(output.toString('utf8'));
-      // expect(output).toContain('http://localhost:3000');
+      const installOutput = execSync('pnpm install', {
+        cwd: projectPath,
+      });
+      expect(installOutput.toString('utf8')).toContain('done');
+
+      expect(fs.existsSync(path.join(projectPath, '.next'))).toBe(false);
+      const buildOutput = execSync(`pnpm run build`, {
+        cwd: projectPath,
+      });
+      const output = buildOutput.toString('utf8');
+      expect(output).toContain('prerendered as static content');
+      expect(output).toContain('server-rendered on demand');
+      expect(fs.existsSync(path.join(projectPath, '.next'))).toBe(true);
     });
   });
 });
