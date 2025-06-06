@@ -52,6 +52,7 @@ cron_tasks.db
 # Temporary test projects
 /test-*
 tasks.db
+/tmp
 
 # Playwright
 node_modules/
