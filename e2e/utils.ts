@@ -1,6 +1,12 @@
 import { test as base } from '@playwright/test';
+import { Task } from './task';
 
-export const test = base.extend<{ forEachTest: void }>({
+interface TestExtend {
+  forEachTest: void;
+  task: Task;
+}
+
+export const test = base.extend<TestExtend>({
   forEachTest: [
     async ({ page }, use) => {
       await page.goto('/');
@@ -14,4 +20,7 @@ export const test = base.extend<{ forEachTest: void }>({
     },
     { auto: true },
   ],
+  task: async ({ page }, use) => {
+    await use(new Task(page));
+  },
 });
