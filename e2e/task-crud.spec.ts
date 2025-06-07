@@ -1,7 +1,5 @@
 import { test } from './utils';
 
-test.use({ viewport: { width: 1920, height: 1080 } });
-
 test.describe('Task CRUD', () => {
   test('create a business task', async ({ page, task }) => {
     const newTask = {
