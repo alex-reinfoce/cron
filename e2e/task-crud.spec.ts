@@ -1,10 +1,12 @@
 import { test } from './utils';
 
 test.describe('Task CRUD', () => {
+  const apiURL = 'http://localhost:5000';
+
   test('create a business task', async ({ page, task }) => {
     const newTask = {
-      apiURL: 'http://localhost:5000',
-      name: 'test',
+      apiURL,
+      name: 'new-test',
     };
     await task.createTask(newTask);
     await page
