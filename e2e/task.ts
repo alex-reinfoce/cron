@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 export class Task {
   constructor(private readonly page: Page) {}
@@ -18,5 +19,16 @@ export class Task {
     await page.getByRole('combobox', { name: 'Execution Frequency' }).click();
     await page.getByRole('option', { name: 'Every Second' }).click();
     await page.getByRole('button', { name: 'Create Task' }).click();
+  }
+
+  async deleteTask(taskName: string) {
+    const page = this.page;
+    await page
+      .getByRole('row', { name: `${taskName} Business Active` })
+      .getByRole('button')
+      .click();
+    await page.getByRole('menuitem', { name: 'Delete Task' }).click();
+    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.getByText('Task deleted successfully').isVisible();
   }
 }

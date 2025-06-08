@@ -9,6 +9,7 @@ interface TestExtend {
 export const test = base.extend<TestExtend>({
   forEachTest: [
     async ({ page }, use) => {
+      await page.setViewportSize({ width: 1920, height: 1080 });
       await page.goto('/');
       await page.getByRole('textbox', { name: 'Enter your username' }).click();
       await page.getByRole('textbox', { name: 'Enter your username' }).fill('admin');

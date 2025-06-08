@@ -4,7 +4,7 @@ test.describe('Task CRUD', () => {
   test('create a business task', async ({ page, task }) => {
     const newTask = {
       apiURL: 'http://localhost:5000',
-      name: 'Mock Server',
+      name: 'test',
     };
     await task.createTask(newTask);
     await page
@@ -18,5 +18,6 @@ test.describe('Task CRUD', () => {
     await page.getByText(newTask.apiURL).isVisible();
     await page.getByText('Every second').isVisible();
     await page.getByText(newTask.name).isVisible();
+    await task.deleteTask(newTask.name);
   });
 });
