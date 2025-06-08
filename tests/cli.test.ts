@@ -51,7 +51,6 @@ describe('Cron CLI', () => {
         encoding: 'utf8',
         cwd: testDir,
       });
-
       expect(output).toContain('Next steps:');
       expect(output).toContain(`cd ${projectName}`);
       expect(output).toContain('npm install');
@@ -59,13 +58,12 @@ describe('Cron CLI', () => {
       expect(output).toContain('npm run upgrade');
     });
 
-    it('should create correct project structure from root directory and build successfully', () => {
+    it('should create correct project structure from root directory', () => {
       const projectName = 'test-structure';
       execSync(`node ${CLI_PATH} create ${projectName}`, {
         cwd: testDir,
         stdio: 'ignore',
       });
-
       const projectPath = path.join(testDir, projectName);
 
       // Check main directories copied from root
@@ -85,7 +83,15 @@ describe('Cron CLI', () => {
       expect(fs.existsSync(path.join(projectPath, '.gitignore'))).toBe(true);
       expect(fs.existsSync(path.join(projectPath, 'tailwind.config.ts'))).toBe(true);
       expect(fs.existsSync(path.join(projectPath, 'components.json'))).toBe(true);
+    });
 
+    it('should build successfully', () => {
+      const projectName = 'test-structure';
+      execSync(`node ${CLI_PATH} create ${projectName}`, {
+        cwd: testDir,
+        stdio: 'ignore',
+      });
+      const projectPath = path.join(testDir, projectName);
       const installOutput = execSync('pnpm install', {
         cwd: projectPath,
       });
