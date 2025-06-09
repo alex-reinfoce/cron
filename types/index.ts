@@ -37,7 +37,6 @@ export interface TaskFormData {
   body?: string;
   schedule_type: string;
   custom_cron?: string;
-  task_type: 'business' | 'keep_alive';
 }
 
 export interface TaskExecutionResult {

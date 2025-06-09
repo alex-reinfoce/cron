@@ -4,14 +4,14 @@ import { test } from './utils';
 test.describe('Task CRUD', () => {
   const apiURL = 'http://localhost:5000';
 
-  test('create a business task', async ({ page, task }) => {
+  test('create a task', async ({ page, task }) => {
     const newTask = {
       apiURL,
       name: 'new-test',
     };
     await task.createTask(newTask);
     await page
-      .getByRole('row', { name: `${newTask.name} Business Active` })
+      .getByRole('row', { name: `${newTask.name}` })
       .getByRole('button')
       .click();
     await page.getByRole('menuitem', { name: 'Test Execute' }).click();
@@ -23,11 +23,8 @@ test.describe('Task CRUD', () => {
     expect(activeTasks).toBe('1');
     const pausedTasks = await page.getByTestId('paused-tasks').textContent();
     expect(pausedTasks).toBe('0');
-    const businessTasks = await page.getByTestId('business-tasks').textContent();
-    expect(businessTasks).toBe('1');
 
     await page.locator('[data-slot="badge"]').first().getByText('Active').isVisible();
-    await page.locator('[data-slot="badge"]').first().getByText('Business').isVisible();
     await page.getByText(newTask.apiURL).isVisible();
     await page.getByText('Every second').isVisible();
     await page.getByText(newTask.name).isVisible();

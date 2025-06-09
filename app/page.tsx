@@ -114,7 +114,6 @@ export default function HomePage() {
         name: values.name,
         url: values.url,
         method: values.method,
-        task_type: values.task_type,
         body: values.body || '',
         cron_expression: cronExpression,
         headers: values.headers.reduce((acc, header) => {
@@ -230,32 +229,11 @@ export default function HomePage() {
     );
   };
 
-  const getTaskTypeBadge = (type: string) => {
-    if (type === 'business') {
-      return (
-        <Badge
-          variant="default"
-          className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800"
-        >
-          <Target className="h-3 w-3 mr-1" />
-          Business
-        </Badge>
-      );
-    }
-    return (
-      <Badge variant="outline">
-        <Zap className="h-3 w-3 mr-1" />
-        Keep Alive
-      </Badge>
-    );
-  };
-
   // Statistics
   const stats = {
     total: tasks.length,
     active: tasks.filter((t) => t.status === 'active').length,
     paused: tasks.filter((t) => t.status === 'paused').length,
-    business: tasks.filter((t) => t.task_type === 'business').length,
   };
 
   return (
@@ -285,7 +263,7 @@ export default function HomePage() {
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
           {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="border shadow-sm">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
@@ -330,21 +308,6 @@ export default function HomePage() {
                 <p className="text-sm text-muted-foreground mt-1">Temporarily stopped</p>
               </CardContent>
             </Card>
-
-            <Card className="border shadow-sm">
-              <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Business Tasks</CardTitle>
-                  <Target className="h-5 w-5 text-blue-600" />
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-blue-600" data-testid="business-tasks">
-                  {stats.business}
-                </div>
-                <p className="text-sm text-muted-foreground mt-1">Business workflows</p>
-              </CardContent>
-            </Card>
           </div>
 
           {/* Tabs */}
@@ -385,7 +348,6 @@ export default function HomePage() {
                         <TableHeader>
                           <TableRow className="bg-muted/50">
                             <TableHead className="font-semibold">Task Name</TableHead>
-                            <TableHead className="font-semibold">Type</TableHead>
                             <TableHead className="font-semibold">Status</TableHead>
                             <TableHead className="hidden md:table-cell font-semibold">URL</TableHead>
                             <TableHead className="hidden lg:table-cell font-semibold">Schedule</TableHead>
@@ -397,7 +359,6 @@ export default function HomePage() {
                           {tasks.map((task) => (
                             <TableRow key={task.id} className="hover:bg-muted/50 transition-colors">
                               <TableCell className="font-medium text-foreground">{task.name}</TableCell>
-                              <TableCell>{getTaskTypeBadge(task.task_type)}</TableCell>
                               <TableCell>{getStatusBadge(task.status)}</TableCell>
                               <TableCell className="hidden md:table-cell max-w-64 truncate">
                                 <a
