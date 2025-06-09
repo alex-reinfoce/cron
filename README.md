@@ -45,7 +45,6 @@ The generated project includes:
 - ⏰ **Flexible Scheduling**: Support for various cron expressions (every second/minute/hour/day/month)
 - 🔄 **Task Management**: Pause, resume, and test tasks with real-time feedback
 - 📊 **Execution Monitoring**: Comprehensive logs and statistics
-- 🎯 **Task Categories**: Business tasks and Keep Alive monitoring
 - 🔧 **HTTP Configuration**: Custom headers and request body support
 - 💾 **Data Persistence**: SQLite database with environment-specific storage
 - 📱 **Responsive Design**: Works on mobile and desktop

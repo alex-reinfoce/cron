@@ -53,7 +53,6 @@ class Database {
           headers TEXT DEFAULT '{}',
           body TEXT DEFAULT '',
           cron_expression TEXT NOT NULL,
-          task_type TEXT NOT NULL,
           status TEXT DEFAULT 'active',
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP

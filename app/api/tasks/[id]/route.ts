@@ -12,11 +12,11 @@ export async function PUT(
     const { id } = await params;
     const taskId = parseInt(id);
     const body = await request.json();
-    const { name, url, method, headers, body: requestBody, cron_expression, task_type, status } = body;
+    const { name, url, method, headers, body: requestBody, cron_expression, status } = body;
 
     await database.initialize();
     const db = database.getDb();
-    
+
     if (!db) {
       return NextResponse.json({ error: 'Database not available' }, { status: 500 });
     }
@@ -38,22 +38,21 @@ export async function PUT(
         cronManager.stopTask(taskId);
 
         // Update task in database
-      db.run(
-        `UPDATE tasks SET name = ?, url = ?, method = ?, headers = ?, body = ?, 
-         cron_expression = ?, task_type = ?, status = ?, updated_at = CURRENT_TIMESTAMP 
+        db.run(
+          `UPDATE tasks SET name = ?, url = ?, method = ?, headers = ?, body = ?, 
+         cron_expression = ?, status = ?, updated_at = CURRENT_TIMESTAMP 
          WHERE id = ?`,
-        [
+          [
             name || currentTask.name,
             url || currentTask.url,
             method || currentTask.method,
             JSON.stringify(headers || JSON.parse(currentTask.headers || '{}')),
             requestBody !== undefined ? requestBody : currentTask.body,
             cron_expression || currentTask.cron_expression,
-            task_type || currentTask.task_type,
             status || currentTask.status,
-          taskId
-        ],
-          function(updateErr) {
+            taskId,
+          ],
+          function (updateErr) {
             if (updateErr) {
               resolve(NextResponse.json({ error: updateErr.message }, { status: 500 }));
             } else {
@@ -67,16 +66,17 @@ export async function PUT(
                   headers: headers || JSON.parse(currentTask.headers || '{}'),
                   body: requestBody !== undefined ? requestBody : currentTask.body,
                   cron_expression: cron_expression || currentTask.cron_expression,
-                  task_type: task_type || currentTask.task_type,
-                  status: 'active' as const
+                  status: 'active' as const,
                 };
                 cronManager.startTask(updatedTask);
               }
 
-              resolve(NextResponse.json({ 
-                message: 'Task updated successfully',
-                id: taskId 
-              }));
+              resolve(
+                NextResponse.json({
+                  message: 'Task updated successfully',
+                  id: taskId,
+                })
+              );
             }
           }
         );
@@ -98,7 +98,7 @@ export async function DELETE(
 
     await database.initialize();
     const db = database.getDb();
-    
+
     if (!db) {
       return NextResponse.json({ error: 'Database not available' }, { status: 500 });
     }
@@ -108,7 +108,7 @@ export async function DELETE(
       cronManager.stopTask(taskId);
 
       // Delete from database
-      db.run('DELETE FROM tasks WHERE id = ?', [taskId], function(err) {
+      db.run('DELETE FROM tasks WHERE id = ?', [taskId], function (err) {
         if (err) {
           resolve(NextResponse.json({ error: err.message }, { status: 500 }));
         } else if (this.changes === 0) {
@@ -121,4 +121,4 @@ export async function DELETE(
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-} 
+}

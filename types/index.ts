@@ -6,7 +6,6 @@ export interface Task {
   headers: Record<string, string>;
   body?: string;
   cron_expression: string;
-  task_type: 'business' | 'keep_alive';
   status: 'active' | 'paused';
   created_at?: string;
   updated_at?: string;
@@ -45,7 +44,7 @@ export interface TaskExecutionResult {
   data?: any;
   error?: string;
   executionTime: number;
-} 
+}
 
 // Authentication related types
 export interface LoginCredentials {
@@ -64,4 +63,4 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   session?: AuthSession;
-} 
+}

@@ -1,5 +1,4 @@
 import type { Page } from '@playwright/test';
-import { expect } from '@playwright/test';
 
 export class Task {
   constructor(private readonly page: Page) {}
@@ -24,7 +23,7 @@ export class Task {
   async deleteTask(taskName: string) {
     const page = this.page;
     await page
-      .getByRole('row', { name: `${taskName} Business Active` })
+      .getByRole('row', { name: `${taskName}` })
       .getByRole('button')
       .click();
     await page.getByRole('menuitem', { name: 'Delete Task' }).click();
