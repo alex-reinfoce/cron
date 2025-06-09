@@ -16,30 +16,16 @@ test.describe('Task CRUD', () => {
       .click();
     await page.getByRole('menuitem', { name: 'Test Execute' }).click();
     await page.getByText('Task executed successfully').isVisible();
-    await page
-      .getByTestId('total-tasks')
-      .textContent()
-      .then((text) => {
-        expect(text).toBe('1');
-      });
-    await page
-      .getByTestId('active-tasks')
-      .textContent()
-      .then((text) => {
-        expect(text).toBe('1');
-      });
-    await page
-      .getByTestId('paused-tasks')
-      .textContent()
-      .then((text) => {
-        expect(text).toBe('0');
-      });
-    await page
-      .getByTestId('business-tasks')
-      .textContent()
-      .then((text) => {
-        expect(text).toBe('1');
-      });
+
+    const totalTasks = await page.getByTestId('total-tasks').textContent();
+    expect(totalTasks).toBe('1');
+    const activeTasks = await page.getByTestId('active-tasks').textContent();
+    expect(activeTasks).toBe('1');
+    const pausedTasks = await page.getByTestId('paused-tasks').textContent();
+    expect(pausedTasks).toBe('0');
+    const businessTasks = await page.getByTestId('business-tasks').textContent();
+    expect(businessTasks).toBe('1');
+
     await page.locator('[data-slot="badge"]').first().getByText('Active').isVisible();
     await page.locator('[data-slot="badge"]').first().getByText('Business').isVisible();
     await page.getByText(newTask.apiURL).isVisible();
