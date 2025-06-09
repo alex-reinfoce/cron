@@ -1,24 +1,12 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,13 +17,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Plus,
   Play,
@@ -56,13 +44,13 @@ import {
   PauseCircle,
   ExternalLink,
   Archive,
-} from "lucide-react";
-import { Task, TaskFormData, TaskLog } from "../types";
-import { getCronDescription, cronSchedules } from "../lib/cronUtils";
-import TaskForm from "@/components/TaskForm";
-import TaskLogs from "@/components/TaskLogs";
-import AuthGuard from "@/components/AuthGuard";
-import { toast } from "sonner";
+} from 'lucide-react';
+import { Task, TaskFormData, TaskLog } from '../types';
+import { getCronDescription, cronSchedules } from '../lib/cronUtils';
+import TaskForm from '@/components/TaskForm';
+import TaskLogs from '@/components/TaskLogs';
+import AuthGuard from '@/components/AuthGuard';
+import { toast } from 'sonner';
 
 export default function HomePage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -79,15 +67,15 @@ export default function HomePage() {
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/tasks");
+      const response = await fetch('/api/tasks');
       if (response.ok) {
         const data = await response.json();
         setTasks(data);
       } else {
-        toast.error("Failed to fetch tasks");
+        toast.error('Failed to fetch tasks');
       }
     } catch (error) {
-      toast.error("Error fetching tasks");
+      toast.error('Error fetching tasks');
     } finally {
       setLoading(false);
     }
@@ -95,16 +83,16 @@ export default function HomePage() {
 
   const fetchLogs = async () => {
     try {
-      const response = await fetch("/api/logs");
+      const response = await fetch('/api/logs');
       if (response.ok) {
         const data = await response.json();
         setLogs(data.logs || []);
       } else {
-        toast.error("Failed to fetch logs");
+        toast.error('Failed to fetch logs');
         setLogs([]);
       }
     } catch (error) {
-      toast.error("Error fetching logs");
+      toast.error('Error fetching logs');
       setLogs([]);
     }
   };
@@ -112,12 +100,13 @@ export default function HomePage() {
   const handleSubmit = async (values: TaskFormData) => {
     try {
       // Convert schedule_type and custom_cron to cron_expression
-      const cronExpression = values.schedule_type === 'custom' 
-        ? values.custom_cron 
-        : cronSchedules.find(s => s.value === values.schedule_type)?.expression;
+      const cronExpression =
+        values.schedule_type === 'custom'
+          ? values.custom_cron
+          : cronSchedules.find((s) => s.value === values.schedule_type)?.expression;
 
       if (!cronExpression) {
-        toast.error("Invalid cron expression");
+        toast.error('Invalid cron expression');
         return;
       }
 
@@ -136,96 +125,90 @@ export default function HomePage() {
         }, {} as Record<string, string>),
       };
 
-      const url = editingTask ? `/api/tasks/${editingTask.id}` : "/api/tasks";
-      const method = editingTask ? "PUT" : "POST";
+      const url = editingTask ? `/api/tasks/${editingTask.id}` : '/api/tasks';
+      const method = editingTask ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(taskData),
       });
 
       if (response.ok) {
-        toast.success(
-          editingTask
-            ? "Task updated successfully"
-            : "Task created successfully"
-        );
+        toast.success(editingTask ? 'Task updated successfully' : 'Task created successfully');
         setModalVisible(false);
         setEditingTask(null);
         fetchTasks();
       } else {
         const error = await response.json();
-        toast.error(error.message || "Operation failed");
+        toast.error(error.message || 'Operation failed');
       }
     } catch (error) {
-      toast.error("Error saving task");
+      toast.error('Error saving task');
     }
   };
 
   const handleStatusToggle = async (task: Task) => {
     try {
-      const newStatus = task.status === "active" ? "paused" : "active";
+      const newStatus = task.status === 'active' ? 'paused' : 'active';
       const response = await fetch(`/api/tasks/${task.id}/status`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
 
       if (response.ok) {
-        toast.success(
-          `Task ${newStatus === "active" ? "activated" : "paused"} successfully`
-        );
+        toast.success(`Task ${newStatus === 'active' ? 'activated' : 'paused'} successfully`);
         fetchTasks();
       } else {
-        toast.error("Failed to update task status");
+        toast.error('Failed to update task status');
       }
     } catch (error) {
-      toast.error("Error updating task status");
+      toast.error('Error updating task status');
     }
   };
 
   const handleDelete = async (taskId: number) => {
     try {
       const response = await fetch(`/api/tasks/${taskId}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (response.ok) {
-        toast.success("Task deleted successfully");
+        toast.success('Task deleted successfully');
         fetchTasks();
       } else {
-        toast.error("Failed to delete task");
+        toast.error('Failed to delete task');
       }
     } catch (error) {
-      toast.error("Error deleting task");
+      toast.error('Error deleting task');
     }
   };
 
   const handleTest = async (task: Task) => {
     try {
       const response = await fetch(`/api/tasks/${task.id}/test`, {
-        method: "POST",
+        method: 'POST',
       });
 
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
-          toast.success("Task executed successfully");
+          toast.success('Task executed successfully');
         } else {
           toast.error(`Task execution failed: ${result.error}`);
         }
         fetchLogs();
       } else {
-        toast.error("Failed to test task");
+        toast.error('Failed to test task');
       }
     } catch (error) {
-      toast.error("Error testing task");
+      toast.error('Error testing task');
     }
   };
 
   const getStatusBadge = (status: string) => {
-    if (status === "active") {
+    if (status === 'active') {
       return (
         <Badge
           variant="default"
@@ -248,7 +231,7 @@ export default function HomePage() {
   };
 
   const getTaskTypeBadge = (type: string) => {
-    if (type === "business") {
+    if (type === 'business') {
       return (
         <Badge
           variant="default"
@@ -270,9 +253,9 @@ export default function HomePage() {
   // Statistics
   const stats = {
     total: tasks.length,
-    active: tasks.filter((t) => t.status === "active").length,
-    paused: tasks.filter((t) => t.status === "paused").length,
-    business: tasks.filter((t) => t.task_type === "business").length,
+    active: tasks.filter((t) => t.status === 'active').length,
+    paused: tasks.filter((t) => t.status === 'paused').length,
+    business: tasks.filter((t) => t.task_type === 'business').length,
   };
 
   return (
@@ -287,19 +270,11 @@ export default function HomePage() {
                   <Activity className="h-6 w-6 text-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-foreground">
-                    Cron Task Platform
-                  </h1>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Enterprise-level scheduled task management
-                  </p>
+                  <h1 className="text-3xl font-bold text-foreground">Cron Task Platform</h1>
+                  <p className="text-sm text-muted-foreground mt-1">Enterprise-level scheduled task management</p>
                 </div>
               </div>
-              <Button
-                onClick={() => setModalVisible(true)}
-                size="lg"
-                className="shadow-lg"
-              >
+              <Button onClick={() => setModalVisible(true)} size="lg" className="shadow-lg">
                 <Plus className="h-5 w-5 mr-2" />
                 Create Task
               </Button>
@@ -314,74 +289,60 @@ export default function HomePage() {
             <Card className="border shadow-sm">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Total Tasks
-                  </CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Tasks</CardTitle>
                   <BarChart3 className="h-5 w-5 text-muted-foreground" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold">{stats.total}</div>
-                <p className="text-sm text-muted-foreground mt-1">
-                  All scheduled tasks
-                </p>
+                <div className="text-3xl font-bold" data-testid="total-tasks">
+                  {stats.total}
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">All scheduled tasks</p>
               </CardContent>
             </Card>
 
             <Card className="border shadow-sm">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Active Tasks
-                  </CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Active Tasks</CardTitle>
                   <CheckCircle2 className="h-5 w-5 text-green-600" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-green-600">
+                <div className="text-3xl font-bold text-green-600" data-testid="active-tasks">
                   {stats.active}
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Currently running
-                </p>
+                <p className="text-sm text-muted-foreground mt-1">Currently running</p>
               </CardContent>
             </Card>
 
             <Card className="border shadow-sm">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Paused Tasks
-                  </CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Paused Tasks</CardTitle>
                   <PauseCircle className="h-5 w-5 text-orange-600" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-orange-600">
+                <div className="text-3xl font-bold text-orange-600" data-testid="paused-tasks">
                   {stats.paused}
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Temporarily stopped
-                </p>
+                <p className="text-sm text-muted-foreground mt-1">Temporarily stopped</p>
               </CardContent>
             </Card>
 
             <Card className="border shadow-sm">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Business Tasks
-                  </CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">Business Tasks</CardTitle>
                   <Target className="h-5 w-5 text-blue-600" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-blue-600">
+                <div className="text-3xl font-bold text-blue-600" data-testid="business-tasks">
                   {stats.business}
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Business workflows
-                </p>
+                <p className="text-sm text-muted-foreground mt-1">Business workflows</p>
               </CardContent>
             </Card>
           </div>
@@ -391,17 +352,11 @@ export default function HomePage() {
             <CardContent className="p-8">
               <Tabs defaultValue="tasks" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-8 h-12">
-                  <TabsTrigger
-                    value="tasks"
-                    className="flex items-center space-x-2 text-base"
-                  >
+                  <TabsTrigger value="tasks" className="flex items-center space-x-2 text-base">
                     <Settings className="h-4 w-4" />
                     <span>Task Management</span>
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="logs"
-                    className="flex items-center space-x-2 text-base"
-                  >
+                  <TabsTrigger value="logs" className="flex items-center space-x-2 text-base">
                     <Archive className="h-4 w-4" />
                     <span>Execution Logs</span>
                   </TabsTrigger>
@@ -415,20 +370,11 @@ export default function HomePage() {
                           <Settings className="h-5 w-5 text-foreground" />
                         </div>
                         <div>
-                          <h3 className="text-xl font-semibold text-foreground">
-                            Task Management
-                          </h3>
-                          <p className="text-sm text-muted-foreground">
-                            Create, edit, and manage your scheduled tasks
-                          </p>
+                          <h3 className="text-xl font-semibold text-foreground">Task Management</h3>
+                          <p className="text-sm text-muted-foreground">Create, edit, and manage your scheduled tasks</p>
                         </div>
                       </div>
-                      <Button
-                        onClick={fetchTasks}
-                        variant="outline"
-                        size="lg"
-                        className="shadow-sm"
-                      >
+                      <Button onClick={fetchTasks} variant="outline" size="lg" className="shadow-sm">
                         <RefreshCw className="h-4 w-4 mr-2" />
                         Refresh
                       </Button>
@@ -438,44 +384,21 @@ export default function HomePage() {
                       <Table>
                         <TableHeader>
                           <TableRow className="bg-muted/50">
-                            <TableHead className="font-semibold">
-                              Task Name
-                            </TableHead>
-                            <TableHead className="font-semibold">
-                              Type
-                            </TableHead>
-                            <TableHead className="font-semibold">
-                              Status
-                            </TableHead>
-                            <TableHead className="hidden md:table-cell font-semibold">
-                              URL
-                            </TableHead>
-                            <TableHead className="hidden lg:table-cell font-semibold">
-                              Schedule
-                            </TableHead>
-                            <TableHead className="hidden xl:table-cell font-semibold">
-                              Created
-                            </TableHead>
-                            <TableHead className="font-semibold text-center">
-                              Actions
-                            </TableHead>
+                            <TableHead className="font-semibold">Task Name</TableHead>
+                            <TableHead className="font-semibold">Type</TableHead>
+                            <TableHead className="font-semibold">Status</TableHead>
+                            <TableHead className="hidden md:table-cell font-semibold">URL</TableHead>
+                            <TableHead className="hidden lg:table-cell font-semibold">Schedule</TableHead>
+                            <TableHead className="hidden xl:table-cell font-semibold">Created</TableHead>
+                            <TableHead className="font-semibold text-center">Actions</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {tasks.map((task) => (
-                            <TableRow
-                              key={task.id}
-                              className="hover:bg-muted/50 transition-colors"
-                            >
-                              <TableCell className="font-medium text-foreground">
-                                {task.name}
-                              </TableCell>
-                              <TableCell>
-                                {getTaskTypeBadge(task.task_type)}
-                              </TableCell>
-                              <TableCell>
-                                {getStatusBadge(task.status)}
-                              </TableCell>
+                            <TableRow key={task.id} className="hover:bg-muted/50 transition-colors">
+                              <TableCell className="font-medium text-foreground">{task.name}</TableCell>
+                              <TableCell>{getTaskTypeBadge(task.task_type)}</TableCell>
+                              <TableCell>{getStatusBadge(task.status)}</TableCell>
                               <TableCell className="hidden md:table-cell max-w-64 truncate">
                                 <a
                                   href={task.url}
@@ -490,20 +413,14 @@ export default function HomePage() {
                               <TableCell className="hidden lg:table-cell">
                                 <div className="flex items-center text-muted-foreground">
                                   <Clock className="h-4 w-4 mr-2" />
-                                  <span className="text-sm">
-                                    {getCronDescription(task.cron_expression)}
-                                  </span>
+                                  <span className="text-sm">{getCronDescription(task.cron_expression)}</span>
                                 </div>
                               </TableCell>
                               <TableCell className="hidden xl:table-cell text-muted-foreground">
                                 <div className="flex items-center">
                                   <Calendar className="h-4 w-4 mr-2" />
                                   <span className="text-sm">
-                                    {task.created_at
-                                      ? new Date(
-                                          task.created_at
-                                        ).toLocaleDateString()
-                                      : "-"}
+                                    {task.created_at ? new Date(task.created_at).toLocaleDateString() : '-'}
                                   </span>
                                 </div>
                               </TableCell>
@@ -511,18 +428,11 @@ export default function HomePage() {
                                 <div className="flex justify-center">
                                   <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                      <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 w-8 p-0"
-                                      >
+                                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                                         <MoreHorizontal className="h-4 w-4" />
                                       </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent
-                                      align="end"
-                                      className="w-48"
-                                    >
+                                    <DropdownMenuContent align="end" className="w-48">
                                       <DropdownMenuItem
                                         onClick={() => {
                                           setEditingTask(task);
@@ -537,7 +447,7 @@ export default function HomePage() {
                                         onClick={() => handleStatusToggle(task)}
                                         className="flex items-center"
                                       >
-                                        {task.status === "active" ? (
+                                        {task.status === 'active' ? (
                                           <>
                                             <PauseCircle className="h-4 w-4 mr-2" />
                                             Pause Task
@@ -549,10 +459,7 @@ export default function HomePage() {
                                           </>
                                         )}
                                       </DropdownMenuItem>
-                                      <DropdownMenuItem
-                                        onClick={() => handleTest(task)}
-                                        className="flex items-center"
-                                      >
+                                      <DropdownMenuItem onClick={() => handleTest(task)} className="flex items-center">
                                         <TestTube className="h-4 w-4 mr-2" />
                                         Test Execute
                                       </DropdownMenuItem>
@@ -573,21 +480,14 @@ export default function HomePage() {
                                               Delete Task
                                             </AlertDialogTitle>
                                             <AlertDialogDescription>
-                                              Are you sure you want to delete "
-                                              <strong>{task.name}</strong>"?
-                                              This action cannot be undone and
-                                              will remove all associated
-                                              execution logs.
+                                              Are you sure you want to delete "<strong>{task.name}</strong>"? This
+                                              action cannot be undone and will remove all associated execution logs.
                                             </AlertDialogDescription>
                                           </AlertDialogHeader>
                                           <AlertDialogFooter>
-                                            <AlertDialogCancel>
-                                              Cancel
-                                            </AlertDialogCancel>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
                                             <AlertDialogAction
-                                              onClick={() =>
-                                                handleDelete(task.id!)
-                                              }
+                                              onClick={() => handleDelete(task.id!)}
                                               className="bg-red-600 hover:bg-red-700"
                                             >
                                               Delete
@@ -611,18 +511,12 @@ export default function HomePage() {
                               <Clock className="h-8 w-8 text-muted-foreground" />
                             </div>
                             <div>
-                              <h3 className="text-lg font-medium text-foreground">
-                                No tasks found
-                              </h3>
+                              <h3 className="text-lg font-medium text-foreground">No tasks found</h3>
                               <p className="text-muted-foreground mt-1">
-                                Create your first task to get started with
-                                automation
+                                Create your first task to get started with automation
                               </p>
                             </div>
-                            <Button
-                              onClick={() => setModalVisible(true)}
-                              className="mt-4"
-                            >
+                            <Button onClick={() => setModalVisible(true)} className="mt-4">
                               <Plus className="h-4 w-4 mr-2" />
                               Create First Task
                             </Button>
@@ -653,9 +547,9 @@ export default function HomePage() {
             <DialogContent
               className="dialog-content w-[95vw] max-w-[1200px] max-h-[95vh] overflow-hidden p-0"
               style={{
-                transform: "translate(-50%, -50%)",
-                animation: "none",
-                transition: "none",
+                transform: 'translate(-50%, -50%)',
+                animation: 'none',
+                transition: 'none',
               }}
             >
               <DialogHeader className="px-6 py-4 border-b bg-muted/30">

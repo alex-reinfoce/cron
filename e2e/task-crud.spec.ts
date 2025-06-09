@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test';
 import { test } from './utils';
 
 test.describe('Task CRUD', () => {
@@ -15,6 +16,30 @@ test.describe('Task CRUD', () => {
       .click();
     await page.getByRole('menuitem', { name: 'Test Execute' }).click();
     await page.getByText('Task executed successfully').isVisible();
+    await page
+      .getByTestId('total-tasks')
+      .textContent()
+      .then((text) => {
+        expect(text).toBe('1');
+      });
+    await page
+      .getByTestId('active-tasks')
+      .textContent()
+      .then((text) => {
+        expect(text).toBe('1');
+      });
+    await page
+      .getByTestId('paused-tasks')
+      .textContent()
+      .then((text) => {
+        expect(text).toBe('0');
+      });
+    await page
+      .getByTestId('business-tasks')
+      .textContent()
+      .then((text) => {
+        expect(text).toBe('1');
+      });
     await page.locator('[data-slot="badge"]').first().getByText('Active').isVisible();
     await page.locator('[data-slot="badge"]').first().getByText('Business').isVisible();
     await page.getByText(newTask.apiURL).isVisible();
